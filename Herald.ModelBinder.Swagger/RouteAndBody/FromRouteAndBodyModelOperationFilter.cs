@@ -46,13 +46,12 @@ namespace Herald.ModelBinder.Swagger
                 {
 
                     context.SchemaRepository.Schemas[actionParameter.ParameterType.Name].Properties.Remove(property);
-                    var parameter = operation.Parameters.Single(p => string.Equals(p.Name, actionParameter.Name, StringComparison.OrdinalIgnoreCase));
-                    operation.Parameters.Remove(parameter);
+                    var parameter = operation.Parameters.FirstOrDefault(p => string.Equals(p.Name, actionParameter.Name, StringComparison.OrdinalIgnoreCase));
+                    if (parameter != null) operation.Parameters.Remove(parameter);
                 }
 
                 if (!context.SchemaRepository.Schemas[actionParameter.ParameterType.Name].Properties.Any())
                 {
-                    context.SchemaRepository.Schemas.Remove(actionParameter.ParameterType.Name);
                     operation.RequestBody = null;
                     continue;
                 }
